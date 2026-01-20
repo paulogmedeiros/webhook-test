@@ -1,7 +1,7 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
-  moduleFormat    = "cjs"
+  provider     = "prisma-client"
+  output       = "../generated/prisma"
+  moduleFormat = "cjs"
 }
 
 datasource db {
@@ -9,17 +9,76 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
+  id        String    @id @db.VarChar(36)
+  email     String    @unique @map("email") @db.VarChar(255) // Endereço de e-mail do usuário
+  password  String    @map("password") @db.VarChar(255) // Senha criptografada do usuário
+  name      String    @map("name") @db.VarChar(255) // Nome completo do usuário
+  deletedAt DateTime? @map("deleted_at") // Data de exclusão lógica do usuário
+  createdAt DateTime  @default(now()) @map("created_at") // Data de criação do usuário
+  updatedAt DateTime  @updatedAt @map("updated_at") // Data da última atualização do usuário
+
+  // Relacionamentos
+  webhooks Webhook[]
+
+  @@map("users")
 }
 
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String? @db.Text
-  published Boolean @default(false)
-  author    User    @relation(fields: [authorId], references: [id])
-  authorId  Int
+model Webhook {
+  id              String    @id @db.VarChar(36)
+  userId          String    @map("user_id") @db.VarChar(36) // ID do usuário proprietário do webhook
+  name            String    @map("name") @db.VarChar(255) // Nome do webhook
+  publicToken     String    @unique @map("public_token") @db.VarChar(255) // Token público para acesso ao webhook
+  description     String?   @map("description") @db.Text // Descrição opcional do webhook
+  isAuthenticated Boolean   @map("is_authenticated") // Indica se o webhook requer autenticação
+  createdAt       DateTime  @default(now()) @map("created_at") // Data de criação do webhook
+  expiresAt       DateTime  @map("expires_at") // Data de expiração do webhook
+  updatedAt       DateTime  @updatedAt @map("updated_at") // Data da última atualização do webhook
+  deletedAt       DateTime? @map("deleted_at") // Data de exclusão lógica do webhook
+
+  // Relacionamentos
+  user     User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  requests WebhookRequest[]
+  methods  WebhookMethod[]
+
+  @@index([userId])
+  @@index([publicToken, deletedAt])
+  @@map("webhooks")
+}
+
+model WebhookRequest {
+  id         String    @id @db.VarChar(36) 
+  webhookId  String    @map("webhook_id") @db.VarChar(36) // ID do webhook associado
+  method     Methods   @map("method") // Método HTTP da requisição
+  url        String    @map("url") @db.Text // URL completa da requisição
+  headers    Json      @map("headers") // Headers da requisição em formato JSON
+  body       Json      @map("body") // Corpo da requisição em formato JSON
+  ipAddress  String    @map("ip_address") @db.VarChar(45) // Endereço IP de origem da requisição
+  receivedAt DateTime  @default(now()) @map("received_at") // Data e hora de recebimento da requisição
+  deletedAt  DateTime? @map("deleted_at") // Data de exclusão lógica da requisição
+
+  // Relacionamentos
+  webhook Webhook @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+
+  @@index([webhookId, receivedAt])
+  @@map("webhook_requests")
+}
+
+model WebhookMethod {
+  id        String  @id @db.VarChar(36)
+  webhookId String  @map("webhook_id") @db.VarChar(36) // ID do webhook
+  method    Methods @map("method") // Método HTTP aceito pelo webhook
+
+  // Relacionamentos
+  webhook Webhook @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+
+  @@unique([webhookId, method]) // Garante que um método não seja duplicado por webhook
+  @@map("webhook_methods")
+}
+
+enum Methods {
+  GET
+  POST
+  PUT
+  DELETE
+  PATCH
 }
