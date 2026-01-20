@@ -12,14 +12,14 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<void> {
-    await this.findEmail(createUserDto.email);
+    await this.emailExists(createUserDto.email);
     createUserDto.password = await this.authService.hashPassword(
       createUserDto.password,
     );
     await this.userRepository.insertUser(createUserDto);
   }
 
-  private async findEmail(email: string) {
+  private async emailExists(email: string) {
     const user = await this.userRepository.findUserByEmail(email);
     if (user) {
       throw new BadRequestException('E-mail já cadastrado');
