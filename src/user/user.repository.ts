@@ -2,12 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { generateId } from 'src/utils/shared/generate.uuidv7';
+import { User } from 'generated/prisma/browser';
 
 @Injectable()
 export class UserRepository {
   constructor(private prisma: PrismaService) {}
 
-  async insertUser(data: CreateUserDto): Promise<void> {
+  async insert(data: CreateUserDto): Promise<void> {
     await this.prisma.user.create({
       data: {
         id: generateId(),
@@ -18,22 +19,22 @@ export class UserRepository {
     });
   }
 
-  async selectUser() {
-    return await this.prisma.user.findMany({
-      where: {
-        deletedAt: null,
-      },
-    });
-  }
+  // async selectUser() {
+  //   return await this.prisma.user.findMany({
+  //     where: {
+  //       deletedAt: null,
+  //     },
+  //   });
+  // }
 
-  async selectUserById(id: string) {
-    return await this.prisma.user.findUnique({
-      where: {
-        id,
-        deletedAt: null,
-      },
-    });
-  }
+  // async selectUserById(id: string) {
+  //   return await this.prisma.user.findUnique({
+  //     where: {
+  //       id,
+  //       deletedAt: null,
+  //     },
+  //   });
+  // }
 
   //   async updateUser(id: string, data: Partial<CreateUserDto>) {
   //     return await this.prisma.user.update({
@@ -45,18 +46,18 @@ export class UserRepository {
   //     });
   //   }
 
-  async softDeleteUser(id: string) {
-    return await this.prisma.user.update({
-      where: {
-        id,
-      },
-      data: {
-        deletedAt: new Date(),
-      },
-    });
-  }
+  // async softDeleteUser(id: string) {
+  //   return await this.prisma.user.update({
+  //     where: {
+  //       id,
+  //     },
+  //     data: {
+  //       deletedAt: new Date(),
+  //     },
+  //   });
+  // }
 
-  async findUserByEmail(email: string) {
+  async selectByEmail(email: string): Promise<User | null> {
     return await this.prisma.user.findFirst({
       where: {
         email,

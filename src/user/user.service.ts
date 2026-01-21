@@ -1,29 +1,25 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+// import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from './user.repository';
-import { AuthService } from 'src/auth/auth.service';
+import { User } from '../../generated/prisma/browser';
+import { hashPassword } from 'src/utils/shared/generate.hashing';
 
 @Injectable()
 export class UserService {
-  constructor(
-    private readonly userRepository: UserRepository,
-    private readonly authService: AuthService,
-  ) {}
+  constructor(private readonly userRepository: UserRepository) {}
 
   async create(createUserDto: CreateUserDto): Promise<void> {
-    await this.emailExists(createUserDto.email);
-    createUserDto.password = await this.authService.hashPassword(
-      createUserDto.password,
-    );
-    await this.userRepository.insertUser(createUserDto);
-  }
-
-  private async emailExists(email: string) {
-    const user = await this.userRepository.findUserByEmail(email);
+    const user = await this.findByEmail(createUserDto.email);
     if (user) {
       throw new BadRequestException('E-mail já cadastrado');
     }
+    createUserDto.password = await hashPassword(createUserDto.password);
+    await this.userRepository.insert(createUserDto);
+  }
+
+  async findByEmail(email: string): Promise<User | null> {
+    return await this.userRepository.selectByEmail(email);
   }
 
   // findAll() {
