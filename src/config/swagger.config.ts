@@ -8,6 +8,7 @@ export function setupSwagger(app: INestApplication) {
       'API desenvolvida para teste, validação e inspeção de webhooks, permitindo simular endpoints, registrar requisições recebidas e analisar payloads em tempo real.',
     )
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
