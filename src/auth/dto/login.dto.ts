@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { User } from 'generated/prisma/client';
 
 export class LoginDto {
   @ApiProperty({
@@ -9,7 +10,7 @@ export class LoginDto {
   })
   @IsEmail()
   @IsNotEmpty({ message: 'O e-mail é obrigatório' })
-  email: string;
+  email: User['email'];
 
   @ApiProperty({
     description: 'Senha do usuário',
@@ -18,5 +19,5 @@ export class LoginDto {
   })
   @IsString()
   @IsNotEmpty({ message: 'A senha é obrigatória' })
-  password: string;
+  password: User['password'];
 }

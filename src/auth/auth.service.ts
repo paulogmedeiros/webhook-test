@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import { comparePasswords } from 'src/utils/shared/generate.hashing';
+import { User } from 'generated/prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -9,7 +10,10 @@ export class AuthService {
     private readonly usersService: UserService,
     private readonly jwtService: JwtService,
   ) {}
-  async signIn(email: string, pass: string): Promise<{ access_token: string }> {
+  async signIn(
+    email: User['email'],
+    pass: User['password'],
+  ): Promise<{ access_token: string }> {
     const user = await this.usersService.findByEmail(email);
 
     if (!user) {
