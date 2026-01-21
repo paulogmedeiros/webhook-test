@@ -10,7 +10,7 @@ import {
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { Public } from './decorator/public.decorator';
+import { Public } from './decorators/public.decorator';
 
 @Controller('auth')
 export class AuthController {

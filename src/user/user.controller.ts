@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { Public } from 'src/auth/decorator/public.decorator';
+import { Public } from 'src/auth/decorators/public.decorator';
 // import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('user')
