@@ -59,7 +59,7 @@ export class CreateWebhookDto {
   @IsDateString({}, { message: 'Data inválida (ISO 8601)' })
   @IsDateWithinThreeMonths({
     message:
-      'A data de expiração deve ser futura e no máximo 1 ano a partir de agora',
+      'A data de expiração deve ser futura e no máximo 3 meses a partir de agora',
   })
   expiresAt: Webhook['expiresAt'] | null;
 }

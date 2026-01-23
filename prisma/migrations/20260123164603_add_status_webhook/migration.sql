@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `webhooks` ADD COLUMN `status` ENUM('ACTIVE', 'EXPIRED') NOT NULL DEFAULT 'ACTIVE';

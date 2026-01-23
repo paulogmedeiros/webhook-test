@@ -1,6 +1,7 @@
 import { Webhook } from 'generated/prisma/client';
 import { CreateWebhookDto } from '../dto/create-webhook.dto';
 import { generateId } from 'src/utils/shared/generate.uuidv7';
+import { EnumWebhookStatus } from '../enum/status';
 
 export class WebhookEntity {
   id: Webhook['id'];
@@ -9,6 +10,7 @@ export class WebhookEntity {
   publicToken: Webhook['publicToken'];
   description: Webhook['description'];
   isAuthenticated: Webhook['isAuthenticated'];
+  status: Webhook['status'];
   expiresAt: Webhook['expiresAt'];
   deletedAt: Webhook['deletedAt'];
 
@@ -20,6 +22,7 @@ export class WebhookEntity {
       webhook.description === null ? null : webhook.description;
     this.isAuthenticated = webhook.isAuthenticated;
     this.deletedAt = null;
+    this.status = EnumWebhookStatus.ACTIVE;
     this.applyExpiration(webhook.expiresAt);
     this.generatePublicToken();
     this.nomalizeName();
