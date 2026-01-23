@@ -7,10 +7,14 @@ import {
   IsDateString,
   MinLength,
   ValidateIf,
+  IsEnum,
+  IsArray,
+  ArrayNotEmpty,
 } from 'class-validator';
 import { Webhook } from 'generated/prisma/client';
 import { IsDateWithinThreeMonths } from './validators/IsDateWithinOneYear';
 import { Transform } from 'class-transformer';
+import { EnumMethods } from 'src/enum/methods';
 
 export class CreateWebhookDto {
   @ApiProperty({
@@ -62,4 +66,15 @@ export class CreateWebhookDto {
       'A data de expiração deve ser futura e no máximo 3 meses a partir de agora',
   })
   expiresAt: Webhook['expiresAt'] | null;
+
+  @ApiProperty({
+    description: 'Método HTTP do webhook',
+    example: ['POST'],
+    enum: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    isArray: true,
+  })
+  @IsArray({ message: 'O campo methods deve ser um array' })
+  @ArrayNotEmpty({ message: 'Deve conter ao menos um método HTTP' })
+  @IsEnum(EnumMethods, { each: true, message: 'Método HTTP inválido' })
+  methods: EnumMethods[];
 }

@@ -1,7 +1,7 @@
 import { Webhook } from 'generated/prisma/client';
-import { CreateWebhookDto } from '../dto/create-webhook.dto';
 import { generateId } from 'src/utils/shared/generate.uuidv7';
 import { EnumWebhookStatus } from '../enum/status';
+import type { webhookDto } from '../types/webhook.types';
 
 export class WebhookEntity {
   id: Webhook['id'];
@@ -14,7 +14,7 @@ export class WebhookEntity {
   expiresAt: Webhook['expiresAt'];
   deletedAt: Webhook['deletedAt'];
 
-  constructor(webhook: CreateWebhookDto, userId: Webhook['userId']) {
+  constructor(webhook: webhookDto, userId: Webhook['userId']) {
     this.id = generateId();
     this.userId = userId;
     this.name = webhook.name;

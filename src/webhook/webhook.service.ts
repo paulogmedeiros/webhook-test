@@ -4,6 +4,7 @@ import { WebhookRepository } from './webhook.repository';
 import { Webhook } from 'generated/prisma/client';
 import { UserService } from 'src/user/user.service';
 import { WebhookEntity } from './entity/webhook.entity';
+import type { webhookDto } from './types/webhook.types';
 
 @Injectable()
 export class WebhookService {
@@ -20,8 +21,9 @@ export class WebhookService {
     if (!user) {
       throw new BadRequestException('Usuário não encontrado');
     }
-    const webhookEntity = new WebhookEntity(createWebhookDto, userId);
-    await this._webhookRepository.insert(webhookEntity);
+    const { methods, ...webhookDto } = createWebhookDto;
+    const webhookEntity = new WebhookEntity(webhookDto as webhookDto, userId);
+    await this._webhookRepository.insert(webhookEntity, methods);
   }
 
   findAll() {

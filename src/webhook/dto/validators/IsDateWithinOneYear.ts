@@ -15,8 +15,23 @@ export function IsDateWithinThreeMonths(validationOptions?: ValidationOptions) {
         validate(value: any) {
           if (!value) return true;
 
+          if (typeof value !== 'string') return false;
+
           const date = new Date(value);
           if (isNaN(date.getTime())) return false;
+
+          const isoMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})T/);
+          if (!isoMatch) return false;
+
+          const [, year, month, day] = isoMatch.map(Number);
+
+          if (
+            date.getUTCFullYear() !== year ||
+            date.getUTCMonth() + 1 !== month ||
+            date.getUTCDate() !== day
+          ) {
+            return false;
+          }
 
           const now = new Date();
 
@@ -27,7 +42,7 @@ export function IsDateWithinThreeMonths(validationOptions?: ValidationOptions) {
         },
 
         defaultMessage(args: ValidationArguments) {
-          return `${args.property} deve ser uma data futura entre agora e no máximo 3 meses`;
+          return `${args.property} deve ser uma data ISO válida, real e entre agora e no máximo 3 meses`;
         },
       },
     });
