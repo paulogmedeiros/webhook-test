@@ -13,6 +13,14 @@ export class UserRepository {
     });
   }
 
+  async selectById(id: User['id']): Promise<User | null> {
+    return await this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
+
   // async selectUser() {
   //   return await this.prisma.user.findMany({
   //     where: {
@@ -52,7 +60,7 @@ export class UserRepository {
   // }
 
   async selectByEmail(email: User['email']): Promise<User | null> {
-    return await this.prisma.user.findFirst({
+    return await this.prisma.user.findUnique({
       where: {
         email,
       },

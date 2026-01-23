@@ -8,11 +8,13 @@ import { UserModule } from 'src/user/user.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { WebhookModule } from 'src/webhook/webhook.module';
 
 @Module({
   imports: [
     AuthModule,
     UserModule,
+    WebhookModule,
     PrismaModule,
     ConfigModule.forRoot({
       isGlobal: true,

@@ -8,7 +8,7 @@ import { UserEntity } from './entity/user.entity';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly _userRepository: UserRepository) {}
 
   async create(createUserDto: CreateUserDto): Promise<void> {
     const emailExists = await this.findByEmail(createUserDto.email);
@@ -17,11 +17,15 @@ export class UserService {
     }
     const userEntity = new UserEntity(createUserDto);
     userEntity.password = await hashPassword(userEntity.password);
-    await this.userRepository.insert(userEntity);
+    await this._userRepository.insert(userEntity);
   }
 
   async findByEmail(email: User['email']): Promise<User | null> {
-    return await this.userRepository.selectByEmail(email);
+    return await this._userRepository.selectByEmail(email);
+  }
+
+  async findById(id: User['id']): Promise<User | null> {
+    return await this._userRepository.selectById(id);
   }
 
   // findAll() {

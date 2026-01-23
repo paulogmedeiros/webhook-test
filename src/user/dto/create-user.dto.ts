@@ -1,5 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString, Matches } from 'class-validator';
+import { Transform } from 'class-transformer';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  Matches,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 import { User } from 'generated/prisma/client';
 
 export class CreateUserDto {
@@ -10,6 +18,7 @@ export class CreateUserDto {
   })
   @IsEmail({}, { message: 'O e-mail deve ser válido' })
   @IsNotEmpty({ message: 'O e-mail é obrigatório' })
+  @MaxLength(255, { message: 'O e-mail deve ter no máximo 255 caracteres' })
   email: User['email'];
 
   @ApiProperty({
@@ -20,6 +29,7 @@ export class CreateUserDto {
   })
   @IsString({ message: 'A senha deve ser uma string' })
   @IsNotEmpty({ message: 'A senha é obrigatória' })
+  @MaxLength(255, { message: 'A senha deve ter no máximo 255 caracteres' })
   @Matches(
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
     {
@@ -34,7 +44,10 @@ export class CreateUserDto {
     example: 'João Silva',
     type: String,
   })
+  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
   @IsString({ message: 'O nome deve ser uma string' })
   @IsNotEmpty({ message: 'O nome é obrigatório' })
+  @MinLength(3, { message: 'O nome deve ter pelo menos 3 caracteres' })
+  @MaxLength(255, { message: 'O nome deve ter no máximo 255 caracteres' })
   name: User['name'];
 }

@@ -13,5 +13,10 @@ export class UserEntity {
     this.email = user.email;
     this.password = user.password;
     this.name = user.name;
+    this.nomalizeName();
+  }
+
+  private nomalizeName(): void {
+    this.name = this.name.trim();
   }
 }
