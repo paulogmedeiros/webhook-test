@@ -5,6 +5,16 @@ import { WebhookRequestEntity } from './entity/webhook-request.entity';
 @Injectable()
 export class WebhookResquestRepository {
   constructor(private prisma: PrismaService) {}
+
+  async selectByWebhookId(webhookId: string): Promise<WebhookRequestEntity[]> {
+    return await this.prisma.webhookRequest.findMany({
+      where: {
+        webhookId,
+        deletedAt: null,
+      },
+    });
+  }
+
   async insert(webhookRequest: WebhookRequestEntity): Promise<void> {
     await this.prisma.webhookRequest.create({
       data: {

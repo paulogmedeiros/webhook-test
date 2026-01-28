@@ -13,6 +13,16 @@ export class WebhookService {
     private readonly _userService: UserService,
   ) {}
 
+  async findByPublicToken(
+    publicToken: Webhook['publicToken'],
+  ): Promise<WebhookWithMethods | null> {
+    return await this._webhookRepository.selectByPublicToken(publicToken);
+  }
+
+  async findById(id: Webhook['id']): Promise<Webhook | null> {
+    return await this._webhookRepository.selectById(id);
+  }
+
   async create(
     createWebhookDto: CreateWebhookDto,
     userId: Webhook['userId'],
@@ -26,9 +36,7 @@ export class WebhookService {
     await this._webhookRepository.insert(webhookEntity, methods);
   }
 
-  findByPublicToken(
-    publicToken: Webhook['publicToken'],
-  ): Promise<WebhookWithMethods | null> {
-    return this._webhookRepository.selectByPublicToken(publicToken);
+  async findAll(): Promise<Webhook[] | null> {
+    return await this._webhookRepository.selectAll();
   }
 }

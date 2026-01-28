@@ -1,4 +1,4 @@
-import { All, Body, Controller, Param, Req } from '@nestjs/common';
+import { All, Body, Controller, Get, Param, Req } from '@nestjs/common';
 import { WebhookResquestService } from './webhook-resquest.service';
 import { Public } from 'src/auth/decorators/public.decorator';
 import type { Request } from 'express';
@@ -6,6 +6,7 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { WebhookRequestDto } from './dto/webhook-request.dto';
 import { EnumMethods } from 'src/enum/methods';
 import { JsonValue } from '@prisma/client/runtime/client';
+import { WebhookRequestEntity } from './entity/webhook-request.entity';
 
 @Controller('webhook-resquet')
 export class WebhookResquestController {
@@ -15,6 +16,13 @@ export class WebhookResquestController {
 
   private isValidMethod(method: string): method is EnumMethods {
     return Object.values(EnumMethods).includes(method as EnumMethods);
+  }
+  @ApiBearerAuth()
+  @Get('/webhook/:webhookId')
+  async getRequestsByWebhookId(
+    @Param('webhookId') webhookId: string,
+  ): Promise<WebhookRequestEntity[]> {
+    return await this._webhookResquestService.findByWebhookId(webhookId);
   }
 
   @Public()

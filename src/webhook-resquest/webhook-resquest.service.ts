@@ -10,6 +10,15 @@ export class WebhookResquestService {
     private readonly _webhookResquestRepository: WebhookResquestRepository,
     private readonly _webhookService: WebhookService,
   ) {}
+
+  async findByWebhookId(webhookId: string): Promise<WebhookRequestEntity[]> {
+    const webhook = await this._webhookService.findById(webhookId);
+    if (!webhook) {
+      throw new NotFoundException('Webhook não encontrado');
+    }
+    return await this._webhookResquestRepository.selectByWebhookId(webhookId);
+  }
+
   async create(webhookRequestDto: WebhookRequestDto): Promise<void> {
     const webhook = await this._webhookService.findByPublicToken(
       webhookRequestDto.tokenPublic,
