@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, Req } from '@nestjs/common';
+import { All, Body, Controller, Param, Req } from '@nestjs/common';
 import { WebhookResquestService } from './webhook-resquest.service';
 import { Public } from 'src/auth/decorators/public.decorator';
 import type { Request } from 'express';
@@ -18,7 +18,7 @@ export class WebhookResquestController {
   }
 
   @Public()
-  @Post(':tokenPublic')
+  @All(':tokenPublic')
   async webhookRequest(
     @Req() req: Request,
     @Body() body: unknown,
@@ -42,7 +42,7 @@ export class WebhookResquestController {
     await this._webhookResquestService.create(webhookRequestDto);
   }
   @ApiBearerAuth()
-  @Post('authenticated/:tokenPublic')
+  @All('authenticated/:tokenPublic')
   async webhookRequestAuth(
     @Req() req: Request,
     @Body() body: unknown,

@@ -18,6 +18,11 @@ export class WebhookResquestService {
       throw new NotFoundException('Webhook not found');
     }
 
+    const allowedMethods = webhook.methods.map((m) => m.method);
+    if (!allowedMethods.includes(webhookRequestDto.method)) {
+      throw new NotFoundException('Metodo HTTP não permitido');
+    }
+
     const webhookRequest = new WebhookRequestEntity(
       webhookRequestDto,
       webhook.id,

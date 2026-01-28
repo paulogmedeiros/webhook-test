@@ -3,7 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { WebhookEntity } from './entity/webhook.entity';
 import { EnumMethods } from 'src/enum/methods';
 import { generateId } from 'src/utils/shared/generate.uuidv7';
-import { Webhook } from 'generated/prisma/client';
+import type { WebhookWithMethods } from './types/webhook.types';
 
 @Injectable()
 export class WebhookRepository {
@@ -29,11 +29,14 @@ export class WebhookRepository {
 
   async selectByPublicToken(
     publicToken: WebhookEntity['publicToken'],
-  ): Promise<Webhook | null> {
-    return await this.prisma.webhook.findUnique({
+  ): Promise<WebhookWithMethods | null> {
+    return this.prisma.webhook.findUnique({
       where: {
         publicToken,
         status: 'ACTIVE',
+      },
+      include: {
+        methods: true,
       },
     });
   }

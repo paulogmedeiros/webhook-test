@@ -4,7 +4,7 @@ import { WebhookRepository } from './webhook.repository';
 import { Webhook } from 'generated/prisma/client';
 import { UserService } from 'src/user/user.service';
 import { WebhookEntity } from './entity/webhook.entity';
-import type { webhookDto } from './types/webhook.types';
+import type { webhookDto, WebhookWithMethods } from './types/webhook.types';
 
 @Injectable()
 export class WebhookService {
@@ -28,7 +28,7 @@ export class WebhookService {
 
   findByPublicToken(
     publicToken: Webhook['publicToken'],
-  ): Promise<Webhook | null> {
+  ): Promise<WebhookWithMethods | null> {
     return this._webhookRepository.selectByPublicToken(publicToken);
   }
 }
