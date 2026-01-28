@@ -26,15 +26,9 @@ export class WebhookService {
     await this._webhookRepository.insert(webhookEntity, methods);
   }
 
-  findAll() {
-    return `This action returns all webhook`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} webhook`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} webhook`;
+  findByPublicToken(
+    publicToken: Webhook['publicToken'],
+  ): Promise<Webhook | null> {
+    return this._webhookRepository.selectByPublicToken(publicToken);
   }
 }

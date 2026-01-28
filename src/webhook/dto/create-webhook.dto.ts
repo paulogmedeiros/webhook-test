@@ -56,7 +56,7 @@ export class CreateWebhookDto {
 
   @ApiProperty({
     description: 'Data de expiração do webhook (ISO 8601) ou null',
-    example: '2026-12-31T23:59:59.999Z',
+    example: '2026-03-25T23:59:59.999Z',
     nullable: true,
   })
   @ValidateIf((_, value) => value !== null)

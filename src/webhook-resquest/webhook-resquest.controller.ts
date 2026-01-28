@@ -4,52 +4,65 @@ import { Public } from 'src/auth/decorators/public.decorator';
 import type { Request } from 'express';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { WebhookRequestDto } from './dto/webhook-request.dto';
+import { EnumMethods } from 'src/enum/methods';
+import { JsonValue } from '@prisma/client/runtime/client';
+
 @Controller('webhook-resquet')
 export class WebhookResquestController {
   constructor(
-    private readonly webhookResquestService: WebhookResquestService,
+    private readonly _webhookResquestService: WebhookResquestService,
   ) {}
+
+  private isValidMethod(method: string): method is EnumMethods {
+    return Object.values(EnumMethods).includes(method as EnumMethods);
+  }
 
   @Public()
   @Post(':tokenPublic')
-  webhookRequest(
+  async webhookRequest(
     @Req() req: Request,
-    @Body() body: any,
+    @Body() body: unknown,
     @Param('tokenPublic') tokenPublic: string,
-  ): void {
-    const method = req.method;
+  ): Promise<void> {
+    const method = this.isValidMethod(req.method)
+      ? req.method
+      : EnumMethods.POST;
     const url = req.originalUrl;
     const headers = req.headers;
     const ipAddress =
       (req.headers['x-forwarded-for'] as string)?.split(',')[0] ?? req.ip;
     const webhookRequestDto = new WebhookRequestDto(
-      JSON.stringify(body),
+      body as JsonValue,
       tokenPublic,
       method,
       url,
-      JSON.stringify(headers),
+      headers,
       ipAddress,
     );
+    await this._webhookResquestService.create(webhookRequestDto);
   }
   @ApiBearerAuth()
   @Post('authenticated/:tokenPublic')
-  webhookRequestAuth(
+  async webhookRequestAuth(
     @Req() req: Request,
-    @Body() body: any,
+    @Body() body: unknown,
     @Param('tokenPublic') tokenPublic: string,
-  ): void {
-    const method = req.method;
+  ): Promise<void> {
+    const method = this.isValidMethod(req.method)
+      ? req.method
+      : EnumMethods.POST;
     const url = req.originalUrl;
     const headers = req.headers;
     const ipAddress =
       (req.headers['x-forwarded-for'] as string)?.split(',')[0] ?? req.ip;
     const webhookRequestDto = new WebhookRequestDto(
-      JSON.stringify(body),
+      body as JsonValue,
       tokenPublic,
       method,
       url,
-      JSON.stringify(headers),
+      headers,
       ipAddress,
     );
+    await this._webhookResquestService.create(webhookRequestDto);
   }
 }

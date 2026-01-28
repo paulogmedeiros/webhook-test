@@ -8,5 +8,6 @@ import { UserModule } from 'src/user/user.module';
   imports: [UserModule],
   controllers: [WebhookController],
   providers: [WebhookService, WebhookRepository],
+  exports: [WebhookService],
 })
 export class WebhookModule {}

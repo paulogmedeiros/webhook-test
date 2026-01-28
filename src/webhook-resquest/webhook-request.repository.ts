@@ -1,13 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { WebhookRequestDto } from './dto/webhook-request.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { WebhookRequestEntity } from './entity/webhook-request.entity';
 
 @Injectable()
 export class WebhookResquestRepository {
   constructor(private prisma: PrismaService) {}
-  async insert(webhookRequestDto: WebhookRequestDto): Promise<void> {
+  async insert(webhookRequest: WebhookRequestEntity): Promise<void> {
     await this.prisma.webhookRequest.create({
-      data: webhookRequestDto,
+      data: {
+        id: webhookRequest.id,
+        webhookId: webhookRequest.webhookId,
+        body: webhookRequest.body ?? {},
+        method: webhookRequest.method,
+        url: webhookRequest.url,
+        headers: webhookRequest.headers ?? {},
+        ipAddress: webhookRequest.ipAddress,
+      },
     });
   }
 }
