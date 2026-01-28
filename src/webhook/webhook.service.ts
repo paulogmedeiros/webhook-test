@@ -5,6 +5,7 @@ import { Webhook } from 'generated/prisma/client';
 import { UserService } from 'src/user/user.service';
 import { WebhookEntity } from './entity/webhook.entity';
 import type { webhookDto, WebhookWithMethods } from './types/webhook.types';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class WebhookService {
@@ -23,6 +24,10 @@ export class WebhookService {
     return await this._webhookRepository.selectById(id);
   }
 
+  async findAll(): Promise<Webhook[] | null> {
+    return await this._webhookRepository.selectAll();
+  }
+
   async create(
     createWebhookDto: CreateWebhookDto,
     userId: Webhook['userId'],
@@ -36,7 +41,14 @@ export class WebhookService {
     await this._webhookRepository.insert(webhookEntity, methods);
   }
 
-  async findAll(): Promise<Webhook[] | null> {
-    return await this._webhookRepository.selectAll();
+  @Cron(CronExpression.EVERY_DAY_AT_9AM)
+  async deactivateExpiredWebhooks(): Promise<void> {
+    const webhooks = await this._webhookRepository.selectAll();
+    const now = new Date();
+    if (webhooks) {
+      for (const webhook of webhooks) {
+        if (webhook.expiresAt && webhook.expiresAt <= now) {}
+      }
+    }
   }
 }

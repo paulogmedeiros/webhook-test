@@ -10,6 +10,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { WebhookModule } from 'src/webhook/webhook.module';
 import { WebhookResquestModule } from 'src/webhook-resquest/webhook-resquest.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { WebhookResquestModule } from 'src/webhook-resquest/webhook-resquest.mod
     WebhookModule,
     WebhookResquestModule,
     PrismaModule,
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,
       validate,
