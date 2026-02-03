@@ -66,6 +66,10 @@ export class WebhookRepository {
     });
   }
 
+  async updateToggleStatus(id, status, data): Promise<void> {
+
+  }
+
   async delete(id: WebhookEntity['id']): Promise<void> {
     await this.prisma.webhook.update({
       where: {

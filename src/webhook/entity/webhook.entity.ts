@@ -2,6 +2,7 @@ import { Webhook } from 'generated/prisma/client';
 import { generateId } from 'src/utils/shared/generate.uuidv7';
 import { EnumWebhookStatus } from '../enum/status';
 import type { webhookDto } from '../types/webhook.types';
+import { hasDataExpired } from 'src/utils/shared/data.experation';
 
 export class WebhookEntity {
   id: Webhook['id'];
@@ -44,22 +45,6 @@ export class WebhookEntity {
   }
 
   private applyExpiration(expiresAt: Date | null): void {
-    if (expiresAt === null) {
-      const now = new Date();
-
-      this.expiresAt = new Date(
-        Date.UTC(
-          now.getUTCFullYear(),
-          now.getUTCMonth(),
-          now.getUTCDate() + 30,
-          now.getUTCHours(),
-          now.getUTCMinutes(),
-          now.getUTCSeconds(),
-          now.getUTCMilliseconds(),
-        ),
-      );
-    } else {
-      this.expiresAt = expiresAt;
-    }
+    this.expiresAt = hasDataExpired(expiresAt);
   }
 }

@@ -6,6 +6,9 @@ import { UserService } from 'src/user/user.service';
 import { WebhookEntity } from './entity/webhook.entity';
 import type { webhookDto, WebhookWithMethods } from './types/webhook.types';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { UpdateStatusWebhookDto } from './dto/update-webhook.dto';
+import { hasDataExpired } from 'src/utils/shared/data.experation';
+import { EnumWebhookStatus } from './enum/status';
 
 @Injectable()
 export class WebhookService {
@@ -53,6 +56,26 @@ export class WebhookService {
       throw new BadRequestException('Webhook não encontrado');
     }
     await this._webhookRepository.delete(id);
+  }
+
+  async toggleStatus(
+    id: Webhook['id'],
+    updateStatus: UpdateStatusWebhookDto,
+  ): Promise<void> {
+    const webhook = await this._webhookRepository.selectById(id);
+    let status;
+    if (!webhook) {
+      throw new BadRequestException('Webhook não encontrado');
+    }
+    if (webhook.status === EnumWebhookStatus.ACTIVE) {
+      status = EnumWebhookStatus.INACTIVE;
+    } else {
+      status = EnumWebhookStatus.ACTIVE;
+    }
+
+    const data = hasDataExpired(updateStatus.expiresAt);
+
+    await this._webhookRepository.updateToggleStatus(id, status, data);
   }
 
   // @Cron(CronExpression.EVERY_DAY_AT_9AM)

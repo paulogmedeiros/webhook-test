@@ -6,12 +6,14 @@ import {
   Param,
   Req,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { WebhookService } from './webhook.service';
 import { CreateWebhookDto } from './dto/create-webhook.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { Request as ExpressRequest } from 'express';
 import { Webhook } from 'generated/prisma/client';
+import { UpdateStatusWebhookDto } from './dto/update-webhook.dto';
 
 /**
  * Todo
@@ -47,6 +49,14 @@ export class WebhookController {
   ): Promise<void> {
     const userId = req.user.sub;
     return await this._webhookService.create(createWebhookDto, userId);
+  }
+
+  @Put(':id')
+  async toggleStatus(
+    @Param('id') id: string,
+    @Body() updateStatus: UpdateStatusWebhookDto,
+  ): Promise<void> {
+    return await this._webhookService.toggleStatus(id, updateStatus);
   }
 
   @Delete(':id')
