@@ -24,8 +24,14 @@ export class WebhookService {
     return await this._webhookRepository.selectById(id);
   }
 
-  async findAll(): Promise<Webhook[] | null> {
-    return await this._webhookRepository.selectAll();
+  async findAllByUserId(
+    userId: Webhook['userId'],
+  ): Promise<WebhookWithMethods[] | null> {
+    const user = await this._userService.findById(userId);
+    if (!user) {
+      throw new BadRequestException('Usuário não encontrado');
+    }
+    return await this._webhookRepository.selectAllByUserId(userId);
   }
 
   async create(
@@ -47,7 +53,8 @@ export class WebhookService {
     const now = new Date();
     if (webhooks) {
       for (const webhook of webhooks) {
-        if (webhook.expiresAt && webhook.expiresAt <= now) {}
+        if (webhook.expiresAt && webhook.expiresAt <= now) {
+        }
       }
     }
   }

@@ -33,10 +33,16 @@ export class WebhookRepository {
     });
   }
 
-  async selectAll(): Promise<Webhook[] | null> {
+  async selectAllByUserId(
+    userId: Webhook['userId'],
+  ): Promise<WebhookWithMethods[] | null> {
     return await this.prisma.webhook.findMany({
       where: {
+        userId,
         status: 'ACTIVE',
+      },
+      include: {
+        methods: true,
       },
     });
   }

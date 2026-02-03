@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Request, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Req } from '@nestjs/common';
 import { WebhookService } from './webhook.service';
 import { CreateWebhookDto } from './dto/create-webhook.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
@@ -8,7 +8,7 @@ import { Webhook } from 'generated/prisma/client';
 /**
  * Todo
  * Paginação dos webhooks
- * Pegar usuario que fez a requisição e coletar apenas os webhooks dele com os metodos
+ * Pegar usuario que fez a requisição e coletar apenas os webhooks dele com os metodos -- V
  * Atualizar webhook
  * Ativar/desativar webhook
  * Deletar webhook (soft delete)
@@ -20,8 +20,11 @@ export class WebhookController {
   constructor(private readonly _webhookService: WebhookService) {}
 
   @Get()
-  async getAll(): Promise<Webhook[] | null> {
-    return await this._webhookService.findAll();
+  async getAll(
+    @Req() req: ExpressRequest & { user: { sub: string } },
+  ): Promise<Webhook[] | null> {
+    const userId = req.user.sub;
+    return await this._webhookService.findAllByUserId(userId);
   }
 
   @Get(':id')
@@ -31,7 +34,7 @@ export class WebhookController {
 
   @Post()
   async create(
-    @Request() req: ExpressRequest & { user: { sub: string } },
+    @Req() req: ExpressRequest & { user: { sub: string } },
     @Body() createWebhookDto: CreateWebhookDto,
   ): Promise<void> {
     const userId = req.user.sub;
