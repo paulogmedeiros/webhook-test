@@ -5,6 +5,7 @@ import { EnumMethods } from 'src/enum/methods';
 import { generateId } from 'src/utils/shared/generate.uuidv7';
 import type { WebhookWithMethods } from './types/webhook.types';
 import { Webhook } from 'generated/prisma/client';
+import { EnumWebhookStatus } from './enum/status';
 
 @Injectable()
 export class WebhookRepository {
@@ -62,6 +63,18 @@ export class WebhookRepository {
           },
         });
       }
+    });
+  }
+
+  async delete(id: WebhookEntity['id']): Promise<void> {
+    await this.prisma.webhook.update({
+      where: {
+        id,
+      },
+      data: {
+        status: EnumWebhookStatus.EXPIRED,
+        deletedAt: new Date(),
+      },
     });
   }
 }

@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Get, Param, Req } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Req,
+  Delete,
+} from '@nestjs/common';
 import { WebhookService } from './webhook.service';
 import { CreateWebhookDto } from './dto/create-webhook.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
@@ -11,7 +19,7 @@ import { Webhook } from 'generated/prisma/client';
  * Pegar usuario que fez a requisição e coletar apenas os webhooks dele com os metodos -- V
  * Atualizar webhook
  * Ativar/desativar webhook
- * Deletar webhook (soft delete)
+ * Deletar webhook (soft delete) -- v
  * Cron para desativar webhooks expirados
  */
 @ApiBearerAuth()
@@ -39,5 +47,10 @@ export class WebhookController {
   ): Promise<void> {
     const userId = req.user.sub;
     return await this._webhookService.create(createWebhookDto, userId);
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string): Promise<void> {
+    return await this._webhookService.delete(id);
   }
 }

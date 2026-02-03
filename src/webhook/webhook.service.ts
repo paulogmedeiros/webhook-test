@@ -47,15 +47,23 @@ export class WebhookService {
     await this._webhookRepository.insert(webhookEntity, methods);
   }
 
-  @Cron(CronExpression.EVERY_DAY_AT_9AM)
-  async deactivateExpiredWebhooks(): Promise<void> {
-    const webhooks = await this._webhookRepository.selectAll();
-    const now = new Date();
-    if (webhooks) {
-      for (const webhook of webhooks) {
-        if (webhook.expiresAt && webhook.expiresAt <= now) {
-        }
-      }
+  async delete(id: Webhook['id']): Promise<void> {
+    const webhook = await this._webhookRepository.selectById(id);
+    if (!webhook) {
+      throw new BadRequestException('Webhook não encontrado');
     }
+    await this._webhookRepository.delete(id);
   }
+
+  // @Cron(CronExpression.EVERY_DAY_AT_9AM)
+  // async deactivateExpiredWebhooks(): Promise<void> {
+  //   const webhooks = await this._webhookRepository.selectAll();
+  //   const now = new Date();
+  //   if (webhooks) {
+  //     for (const webhook of webhooks) {
+  //       if (webhook.expiresAt && webhook.expiresAt <= now) {
+  //       }
+  //     }
+  //   }
+  // }
 }
