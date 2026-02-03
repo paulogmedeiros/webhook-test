@@ -3,6 +3,7 @@ import { WebhookRequestDto } from './dto/webhook-request.dto';
 import { WebhookResquestRepository } from './webhook-request.repository';
 import { WebhookService } from 'src/webhook/webhook.service';
 import { WebhookRequestEntity } from './entity/webhook-request.entity';
+import { WebhookRequest } from 'generated/prisma/client';
 
 @Injectable()
 export class WebhookResquestService {
@@ -37,5 +38,19 @@ export class WebhookResquestService {
       webhook.id,
     );
     await this._webhookResquestRepository.insert(webhookRequest);
+  }
+
+  private findWebhookRequestById(
+    id: WebhookRequest['id'],
+  ): Promise<WebhookRequest | null> {
+    return this._webhookResquestRepository.selectById(id);
+  }
+
+  async remove(id: WebhookRequest['id']): Promise<void> {
+    const webhookRequest = await this.findWebhookRequestById(id);
+    if (!webhookRequest) {
+      throw new NotFoundException('Webhook Request não encontrado');
+    }
+    await this._webhookResquestRepository.delete(id);
   }
 }

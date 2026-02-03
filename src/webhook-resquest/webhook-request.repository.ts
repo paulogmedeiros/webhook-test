@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { WebhookRequestEntity } from './entity/webhook-request.entity';
+import { WebhookRequest } from 'generated/prisma/client';
 
 @Injectable()
 export class WebhookResquestRepository {
@@ -10,6 +11,15 @@ export class WebhookResquestRepository {
     return await this.prisma.webhookRequest.findMany({
       where: {
         webhookId,
+        deletedAt: null,
+      },
+    });
+  }
+
+  async selectById(id: string): Promise<WebhookRequest | null> {
+    return await this.prisma.webhookRequest.findFirst({
+      where: {
+        id,
         deletedAt: null,
       },
     });
@@ -25,6 +35,17 @@ export class WebhookResquestRepository {
         url: webhookRequest.url,
         headers: webhookRequest.headers ?? {},
         ipAddress: webhookRequest.ipAddress,
+      },
+    });
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.prisma.webhookRequest.update({
+      where: {
+        id,
+      },
+      data: {
+        deletedAt: new Date(),
       },
     });
   }

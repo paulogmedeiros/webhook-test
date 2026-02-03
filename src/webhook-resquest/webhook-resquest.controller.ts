@@ -1,4 +1,4 @@
-import { All, Body, Controller, Get, Param, Req } from '@nestjs/common';
+import { All, Body, Controller, Delete, Get, Param, Req } from '@nestjs/common';
 import { WebhookResquestService } from './webhook-resquest.service';
 import { Public } from 'src/auth/decorators/public.decorator';
 import type { Request } from 'express';
@@ -72,5 +72,10 @@ export class WebhookResquestController {
       ipAddress,
     );
     await this._webhookResquestService.create(webhookRequestDto);
+  }
+
+  @Delete(':id')
+  async deleteWebhookRequest(@Param('id') id: string): Promise<void> {
+    return await this._webhookResquestService.remove(id);
   }
 }

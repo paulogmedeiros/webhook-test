@@ -12,6 +12,12 @@ import { LoginDto } from './dto/login.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { Public } from './decorators/public.decorator';
 
+/**
+ * Todo
+ * Criar endpoint para refresh token
+ * Salvar cookie no cookie
+ */
+
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

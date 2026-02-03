@@ -5,6 +5,15 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { Request as ExpressRequest } from 'express';
 import { Webhook } from 'generated/prisma/client';
 
+/**
+ * Todo
+ * Paginação dos webhooks
+ * Pegar usuario que fez a requisição e coletar apenas os webhooks dele com os metodos
+ * Atualizar webhook
+ * Ativar/desativar webhook
+ * Deletar webhook (soft delete)
+ * Cron para desativar webhooks expirados
+ */
 @ApiBearerAuth()
 @Controller('webhook')
 export class WebhookController {
