@@ -11,6 +11,19 @@ import { EnumWebhookStatus } from './enum/status';
 export class WebhookRepository {
   constructor(private prisma: PrismaService) {}
 
+  async selectAllActive(): Promise<Pick<Webhook, 'id' | 'expiresAt'>[] | null> {
+    return await this.prisma.webhook.findMany({
+      where: {
+        status: EnumWebhookStatus.ACTIVE,
+        deletedAt: null,
+      },
+      select: {
+        id: true,
+        expiresAt: true,
+      },
+    });
+  }
+
   async selectByPublicToken(
     publicToken: WebhookEntity['publicToken'],
   ): Promise<WebhookWithMethods | null> {
@@ -67,20 +80,19 @@ export class WebhookRepository {
     });
   }
 
-  async updateToggleStatus(
+  async updateStatus(
     id: Webhook['id'],
-    status: Webhook['status'],
-    date: Webhook['expiresAt'],
+    data: {
+      status: EnumWebhookStatus;
+      publicToken?: string;
+      expiresAt?: Date;
+    },
   ): Promise<void> {
     await this.prisma.webhook.update({
       where: {
         id,
       },
-      data: {
-        publicToken: generateId(),
-        status,
-        expiresAt: date,
-      },
+      data,
     });
   }
 

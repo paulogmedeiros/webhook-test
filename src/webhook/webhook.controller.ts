@@ -20,7 +20,7 @@ import { UpdateStatusWebhookDto } from './dto/update-webhook.dto';
  * Paginação dos webhooks
  * Pegar usuario que fez a requisição e coletar apenas os webhooks dele com os metodos -- V
  * Atualizar webhook
- * Ativar/desativar webhook
+ * Ativar/desativar webhook -- v
  * Deletar webhook (soft delete) -- v
  * Cron para desativar webhooks expirados
  */

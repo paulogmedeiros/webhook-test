@@ -9,6 +9,7 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { UpdateStatusWebhookDto } from './dto/update-webhook.dto';
 import { hasDataExpired } from 'src/utils/shared/data.experation';
 import { EnumWebhookStatus } from './enum/status';
+import { generateId } from 'src/utils/shared/generate.uuidv7';
 
 @Injectable()
 export class WebhookService {
@@ -63,30 +64,39 @@ export class WebhookService {
     updateStatus: UpdateStatusWebhookDto,
   ): Promise<void> {
     const webhook = await this._webhookRepository.selectById(id);
-    let status: EnumWebhookStatus;
     if (!webhook) {
       throw new BadRequestException('Webhook não encontrado');
     }
+    let data: {
+      status: EnumWebhookStatus;
+      publicToken?: string;
+      expiresAt?: Date;
+    };
     if ((webhook.status as EnumWebhookStatus) === EnumWebhookStatus.ACTIVE) {
-      status = EnumWebhookStatus.EXPIRED;
+      data = { status: EnumWebhookStatus.EXPIRED };
     } else {
-      status = EnumWebhookStatus.ACTIVE;
+      data = {
+        status: EnumWebhookStatus.ACTIVE,
+        expiresAt: hasDataExpired(updateStatus.expiresAt),
+        publicToken: generateId(),
+      };
     }
 
-    const date: Date = hasDataExpired(updateStatus.expiresAt);
-
-    await this._webhookRepository.updateToggleStatus(id, status, date);
+    await this._webhookRepository.updateStatus(id, data);
   }
 
-  // @Cron(CronExpression.EVERY_DAY_AT_9AM)
-  // async deactivateExpiredWebhooks(): Promise<void> {
-  //   const webhooks = await this._webhookRepository.selectAll();
-  //   const now = new Date();
-  //   if (webhooks) {
-  //     for (const webhook of webhooks) {
-  //       if (webhook.expiresAt && webhook.expiresAt <= now) {
-  //       }
-  //     }
-  //   }
-  // }
+  @Cron(CronExpression.EVERY_DAY_AT_9AM)
+  async deactivateExpiredWebhooks(): Promise<void> {
+    const webhooks = await this._webhookRepository.selectAllActive();
+    const now = new Date();
+    if (webhooks) {
+      for (const webhook of webhooks) {
+        if (webhook.expiresAt < now) {
+          await this._webhookRepository.updateStatus(webhook.id, {
+            status: EnumWebhookStatus.EXPIRED,
+          });
+        }
+      }
+    }
+  }
 }
