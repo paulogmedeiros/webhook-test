@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { WebhookRequestDto } from './dto/webhook-request.dto';
+import { WebhookRequestDto } from './dto/create-webhook-request.dto';
 import { WebhookResquestRepository } from './webhook-request.repository';
 import { WebhookService } from 'src/webhook/webhook.service';
 import { WebhookRequestEntity } from './entity/webhook-request.entity';

@@ -1,7 +1,10 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsDateString, ValidateIf } from 'class-validator';
 import { IsDateWithinThreeMonths } from './validators/IsDateWithinOneYear';
 import { Webhook } from 'generated/prisma/client';
+import { CreateWebhookDto } from './create-webhook.dto';
+
+export class UpdateWebhookDto extends PartialType(CreateWebhookDto) {}
 
 export class UpdateStatusWebhookDto {
   @ApiProperty({

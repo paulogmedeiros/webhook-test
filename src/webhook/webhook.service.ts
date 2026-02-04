@@ -4,9 +4,16 @@ import { WebhookRepository } from './webhook.repository';
 import { Webhook } from 'generated/prisma/client';
 import { UserService } from 'src/user/user.service';
 import { WebhookEntity } from './entity/webhook.entity';
-import type { webhookDto, WebhookWithMethods } from './types/webhook.types';
+import type {
+  webhookDto,
+  webhookUpdate,
+  WebhookWithMethods,
+} from './types/webhook.types';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { UpdateStatusWebhookDto } from './dto/update-webhook.dto';
+import {
+  UpdateStatusWebhookDto,
+  UpdateWebhookDto,
+} from './dto/update-webhook.dto';
 import { hasDataExpired } from 'src/utils/shared/data.experation';
 import { EnumWebhookStatus } from './enum/status';
 import { generateId } from 'src/utils/shared/generate.uuidv7';
@@ -51,6 +58,23 @@ export class WebhookService {
     await this._webhookRepository.insert(webhookEntity, methods);
   }
 
+  async edit(
+    id: Webhook['id'],
+    updateWebhookDto: UpdateWebhookDto,
+  ): Promise<void> {
+    const webhook = await this._webhookRepository.selectById(id);
+    if (!webhook) {
+      throw new BadRequestException('Webhook não encontrado');
+    }
+    const { methods, ...webhookDto } = updateWebhookDto;
+    if (Object.keys(webhookDto).length) {
+      await this._webhookRepository.update(id, webhookDto as webhookUpdate);
+    }
+    if (methods) {
+      await this._webhookRepository.updateMethods(id, methods);
+    }
+  }
+
   async delete(id: Webhook['id']): Promise<void> {
     const webhook = await this._webhookRepository.selectById(id);
     if (!webhook) {
@@ -85,7 +109,7 @@ export class WebhookService {
     await this._webhookRepository.updateStatus(id, data);
   }
 
-  @Cron(CronExpression.EVERY_DAY_AT_9AM)
+  @Cron(CronExpression.EVERY_DAY_AT_5AM)
   async deactivateExpiredWebhooks(): Promise<void> {
     const webhooks = await this._webhookRepository.selectAllActive();
     const now = new Date();

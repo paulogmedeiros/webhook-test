@@ -3,7 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { WebhookEntity } from './entity/webhook.entity';
 import { EnumMethods } from 'src/enum/methods';
 import { generateId } from 'src/utils/shared/generate.uuidv7';
-import type { WebhookWithMethods } from './types/webhook.types';
+import type { webhookUpdate, WebhookWithMethods } from './types/webhook.types';
 import { Webhook } from 'generated/prisma/client';
 import { EnumWebhookStatus } from './enum/status';
 
@@ -73,6 +73,37 @@ export class WebhookRepository {
           data: {
             id: generateId(),
             webhookId: webhook.id,
+            method,
+          },
+        });
+      }
+    });
+  }
+
+  async update(id: WebhookEntity['id'], data: webhookUpdate): Promise<void> {
+    await this.prisma.webhook.update({
+      where: {
+        id,
+      },
+      data,
+    });
+  }
+
+  async updateMethods(
+    id: WebhookEntity['id'],
+    methods: EnumMethods[],
+  ): Promise<void> {
+    await this.prisma.$transaction(async (tx) => {
+      await tx.webhookMethod.deleteMany({
+        where: {
+          webhookId: id,
+        },
+      });
+      for (const method of methods) {
+        await tx.webhookMethod.create({
+          data: {
+            id: generateId(),
+            webhookId: id,
             method,
           },
         });

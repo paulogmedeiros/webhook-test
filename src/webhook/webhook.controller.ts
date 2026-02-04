@@ -13,16 +13,19 @@ import { CreateWebhookDto } from './dto/create-webhook.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { Request as ExpressRequest } from 'express';
 import { Webhook } from 'generated/prisma/client';
-import { UpdateStatusWebhookDto } from './dto/update-webhook.dto';
+import {
+  UpdateStatusWebhookDto,
+  UpdateWebhookDto,
+} from './dto/update-webhook.dto';
 
 /**
  * Todo
  * Paginação dos webhooks
  * Pegar usuario que fez a requisição e coletar apenas os webhooks dele com os metodos -- V
- * Atualizar webhook
+ * Atualizar webhook -- v
  * Ativar/desativar webhook -- v
  * Deletar webhook (soft delete) -- v
- * Cron para desativar webhooks expirados
+ * Cron para desativar webhooks expirados -- v
  */
 @ApiBearerAuth()
 @Controller('webhook')
@@ -52,6 +55,14 @@ export class WebhookController {
   }
 
   @Put(':id')
+  async update(
+    @Body() updateWebhookDto: UpdateWebhookDto,
+    @Param('id') id: string,
+  ): Promise<void> {
+    return await this._webhookService.edit(id, updateWebhookDto);
+  }
+
+  @Put('toggle-status/:id')
   async toggleStatus(
     @Param('id') id: string,
     @Body() updateStatus: UpdateStatusWebhookDto,

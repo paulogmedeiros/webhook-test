@@ -3,7 +3,7 @@ import { WebhookResquestService } from './webhook-resquest.service';
 import { Public } from 'src/auth/decorators/public.decorator';
 import type { Request } from 'express';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { WebhookRequestDto } from './dto/webhook-request.dto';
+import { WebhookRequestDto } from './dto/create-webhook-request.dto';
 import { EnumMethods } from 'src/enum/methods';
 import { JsonValue } from '@prisma/client/runtime/client';
 import { WebhookRequestEntity } from './entity/webhook-request.entity';
