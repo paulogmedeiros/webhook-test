@@ -24,7 +24,7 @@ export class WebhookEntity {
     this.isAuthenticated = webhook.isAuthenticated;
     this.deletedAt = null;
     this.status = EnumWebhookStatus.ACTIVE;
-    this.applyExpiration(webhook.expiresAt);
+    this.expiresAt = hasDataExpired(webhook.expiresAt);
     this.generatePublicToken();
     this.nomalizeName();
     this.nomalizeDescription();
@@ -42,9 +42,5 @@ export class WebhookEntity {
     if (this.description) {
       this.description = this.description.trim();
     }
-  }
-
-  private applyExpiration(expiresAt: Date | null): void {
-    this.expiresAt = hasDataExpired(expiresAt);
   }
 }

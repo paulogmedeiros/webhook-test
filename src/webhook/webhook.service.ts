@@ -63,19 +63,19 @@ export class WebhookService {
     updateStatus: UpdateStatusWebhookDto,
   ): Promise<void> {
     const webhook = await this._webhookRepository.selectById(id);
-    let status;
+    let status: EnumWebhookStatus;
     if (!webhook) {
       throw new BadRequestException('Webhook não encontrado');
     }
-    if (webhook.status === EnumWebhookStatus.ACTIVE) {
-      status = EnumWebhookStatus.INACTIVE;
+    if ((webhook.status as EnumWebhookStatus) === EnumWebhookStatus.ACTIVE) {
+      status = EnumWebhookStatus.EXPIRED;
     } else {
       status = EnumWebhookStatus.ACTIVE;
     }
 
-    const data = hasDataExpired(updateStatus.expiresAt);
+    const date: Date = hasDataExpired(updateStatus.expiresAt);
 
-    await this._webhookRepository.updateToggleStatus(id, status, data);
+    await this._webhookRepository.updateToggleStatus(id, status, date);
   }
 
   // @Cron(CronExpression.EVERY_DAY_AT_9AM)

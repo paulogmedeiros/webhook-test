@@ -25,7 +25,7 @@ export class WebhookResquestService {
       webhookRequestDto.tokenPublic,
     );
     if (!webhook) {
-      throw new NotFoundException('Webhook not found');
+      throw new NotFoundException('Webhook não encontrado');
     }
 
     const allowedMethods = webhook.methods.map((m) => m.method);

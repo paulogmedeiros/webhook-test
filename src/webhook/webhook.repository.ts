@@ -17,7 +17,8 @@ export class WebhookRepository {
     return this.prisma.webhook.findUnique({
       where: {
         publicToken,
-        status: 'ACTIVE',
+        status: EnumWebhookStatus.ACTIVE,
+        deletedAt: null,
       },
       include: {
         methods: true,
@@ -29,7 +30,7 @@ export class WebhookRepository {
     return await this.prisma.webhook.findUnique({
       where: {
         id,
-        status: 'ACTIVE',
+        deletedAt: null,
       },
     });
   }
@@ -40,7 +41,7 @@ export class WebhookRepository {
     return await this.prisma.webhook.findMany({
       where: {
         userId,
-        status: 'ACTIVE',
+        deletedAt: null,
       },
       include: {
         methods: true,
@@ -66,8 +67,21 @@ export class WebhookRepository {
     });
   }
 
-  async updateToggleStatus(id, status, data): Promise<void> {
-
+  async updateToggleStatus(
+    id: Webhook['id'],
+    status: Webhook['status'],
+    date: Webhook['expiresAt'],
+  ): Promise<void> {
+    await this.prisma.webhook.update({
+      where: {
+        id,
+      },
+      data: {
+        publicToken: generateId(),
+        status,
+        expiresAt: date,
+      },
+    });
   }
 
   async delete(id: WebhookEntity['id']): Promise<void> {
