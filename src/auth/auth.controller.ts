@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
-import { ApiBearerAuth } from '@nestjs/swagger';
 import { Public } from './decorators/public.decorator';
 import { RecoveredDto } from './dto/recovered.dto';
 
@@ -31,7 +30,7 @@ export class AuthController {
   }
 
   @Public()
-  @Post('recovered')
+  @Post('forgot-password')
   async recoverd(@Body() recoveredDto: RecoveredDto): Promise<void> {
     return await this.authService.recoverdEmail(recoveredDto);
   }

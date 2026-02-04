@@ -77,11 +77,8 @@ model WebhookMethod {
 }
 
 enum Methods {
-  GET
   POST
   PUT
-  DELETE
-  PATCH
 }
 
 enum WebhookStatus {

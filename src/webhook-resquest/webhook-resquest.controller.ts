@@ -1,4 +1,13 @@
-import { All, Body, Controller, Delete, Get, Param, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Req,
+} from '@nestjs/common';
 import { WebhookResquestService } from './webhook-resquest.service';
 import { Public } from 'src/auth/decorators/public.decorator';
 import type { Request } from 'express';
@@ -26,8 +35,33 @@ export class WebhookResquestController {
   }
 
   @Public()
-  @All(':tokenPublic')
-  async webhookRequest(
+  @Post(':tokenPublic')
+  async postWebhookRequest(
+    @Req() req: Request,
+    @Body() body: unknown,
+    @Param('tokenPublic') tokenPublic: string,
+  ): Promise<void> {
+    const method = this.isValidMethod(req.method)
+      ? req.method
+      : EnumMethods.POST;
+    const url = req.originalUrl;
+    const headers = req.headers;
+    const ipAddress =
+      (req.headers['x-forwarded-for'] as string)?.split(',')[0] ?? req.ip;
+    const webhookRequestDto = new WebhookRequestDto(
+      body as JsonValue,
+      tokenPublic,
+      method,
+      url,
+      headers,
+      ipAddress,
+    );
+    await this._webhookResquestService.create(webhookRequestDto);
+  }
+
+  @Public()
+  @Put(':tokenPublic')
+  async putWebhookRequest(
     @Req() req: Request,
     @Body() body: unknown,
     @Param('tokenPublic') tokenPublic: string,
@@ -50,8 +84,33 @@ export class WebhookResquestController {
     await this._webhookResquestService.create(webhookRequestDto);
   }
   @ApiBearerAuth()
-  @All('authenticated/:tokenPublic')
-  async webhookRequestAuth(
+  @Post('authenticated/:tokenPublic')
+  async postWebhookRequestAuth(
+    @Req() req: Request,
+    @Body() body: unknown,
+    @Param('tokenPublic') tokenPublic: string,
+  ): Promise<void> {
+    const method = this.isValidMethod(req.method)
+      ? req.method
+      : EnumMethods.POST;
+    const url = req.originalUrl;
+    const headers = req.headers;
+    const ipAddress =
+      (req.headers['x-forwarded-for'] as string)?.split(',')[0] ?? req.ip;
+    const webhookRequestDto = new WebhookRequestDto(
+      body as JsonValue,
+      tokenPublic,
+      method,
+      url,
+      headers,
+      ipAddress,
+    );
+    await this._webhookResquestService.create(webhookRequestDto);
+  }
+
+  @ApiBearerAuth()
+  @Put('authenticated/:tokenPublic')
+  async putWebhookRequestAuth(
     @Req() req: Request,
     @Body() body: unknown,
     @Param('tokenPublic') tokenPublic: string,
