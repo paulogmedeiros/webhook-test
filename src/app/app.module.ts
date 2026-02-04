@@ -11,6 +11,7 @@ import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { WebhookModule } from 'src/webhook/webhook.module';
 import { WebhookResquestModule } from 'src/webhook-resquest/webhook-resquest.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { EmailModule } from 'src/email/email.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     UserModule,
     WebhookModule,
     WebhookResquestModule,
+    EmailModule,
     PrismaModule,
     ScheduleModule.forRoot(),
     ConfigModule.forRoot({

@@ -53,6 +53,10 @@ class EnvironmentVariables {
   @IsString()
   @IsNotEmpty()
   DATABASE_NAME: string;
+
+  @IsString()
+  @IsNotEmpty()
+  EMAIL_API_KEY: string;
 }
 
 export function validate(config: Record<string, unknown>) {
