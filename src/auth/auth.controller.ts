@@ -31,7 +31,7 @@ export class AuthController {
   }
 
   @Public()
-  @Post()
+  @Post('recovered')
   async recoverd(@Body() recoveredDto: RecoveredDto): Promise<void> {
     return await this.authService.recoverdEmail(recoveredDto);
   }
