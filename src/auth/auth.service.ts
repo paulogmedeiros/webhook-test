@@ -3,12 +3,15 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import { comparePasswords } from 'src/utils/shared/generate.hashing';
 import { User } from 'generated/prisma/client';
+import { RecoveredDto } from './dto/recovered.dto';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UserService,
     private readonly jwtService: JwtService,
+    private readonly emailService: EmailService,
   ) {}
   async signIn(
     email: User['email'],
@@ -30,5 +33,9 @@ export class AuthService {
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
+  }
+
+  async recoverdEmail(recoveredDto: RecoveredDto): Promise<void> {
+    return await this.emailService.sendResetPasswordEmail(recoveredDto.email);
   }
 }

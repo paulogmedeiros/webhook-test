@@ -11,6 +11,7 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { Public } from './decorators/public.decorator';
+import { RecoveredDto } from './dto/recovered.dto';
 
 /**
  * Todo
@@ -25,12 +26,13 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() signInDto: LoginDto) {
-    return this.authService.signIn(signInDto.email, signInDto.password);
+  async signIn(@Body() signInDto: LoginDto) {
+    return await this.authService.signIn(signInDto.email, signInDto.password);
   }
-  @ApiBearerAuth()
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
+
+  @Public()
+  @Post()
+  async recoverd(@Body() recoveredDto: RecoveredDto): Promise<void> {
+    return await this.authService.recoverdEmail(recoveredDto);
   }
 }

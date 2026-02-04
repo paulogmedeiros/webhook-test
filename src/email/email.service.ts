@@ -7,7 +7,8 @@ import { RESET_PASSWORD_TEMPLATE } from './templates/reset-password.template';
 export class EmailService {
   constructor(private readonly httpService: HttpService) {}
 
-  async sendResetPasswordEmail(toEmail: string, resetUrl: string) {
+  async sendResetPasswordEmail(toEmail: string) {
+    const resetUrl = 'dawd';
     const html = RESET_PASSWORD_TEMPLATE.replace(
       '{{RESET_PASSWORD_URL}}',
       resetUrl,
