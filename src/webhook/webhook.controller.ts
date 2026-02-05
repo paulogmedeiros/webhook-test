@@ -12,7 +12,7 @@ import { WebhookService } from './webhook.service';
 import { CreateWebhookDto } from './dto/create-webhook.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Request as ExpressRequest } from 'express';
-import { Webhook } from 'generated/prisma/client';
+import { Webhook } from '../prisma/generated/prisma/client';
 import {
   UpdateStatusWebhookDto,
   UpdateWebhookDto,

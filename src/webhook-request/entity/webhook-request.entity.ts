@@ -1,4 +1,4 @@
-import { WebhookRequest } from 'generated/prisma/client';
+import { WebhookRequest } from '../../prisma/generated/prisma/client';
 import { WebhookRequestDto } from '../dto/create-webhook-request.dto';
 import { generateId } from 'src/utils/shared/generate.uuidv7';
 

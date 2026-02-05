@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { WebhookRequestEntity } from './entity/webhook-request.entity';
-import { WebhookRequest } from 'generated/prisma/client';
+import { WebhookRequest } from '../prisma/generated/prisma/client';
 
 @Injectable()
 export class WebhookRequestRepository {

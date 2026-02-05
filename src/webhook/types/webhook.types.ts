@@ -1,5 +1,5 @@
 import { CreateWebhookDto } from '../dto/create-webhook.dto';
-import { Prisma } from '../../../generated/prisma/client';
+import { Prisma } from '../../prisma/generated/prisma/client';
 import { WebhookEntity } from '../entity/webhook.entity';
 
 export type webhookDto = Omit<CreateWebhookDto, 'methods'>;

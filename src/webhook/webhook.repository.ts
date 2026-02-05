@@ -4,7 +4,7 @@ import { WebhookEntity } from './entity/webhook.entity';
 import { EnumMethods } from 'src/enum/methods';
 import { generateId } from 'src/utils/shared/generate.uuidv7';
 import type { webhookUpdate, WebhookWithMethods } from './types/webhook.types';
-import { Webhook } from 'generated/prisma/client';
+import { Webhook } from '../prisma/generated/prisma/client';
 import { EnumWebhookStatus } from './enum/status';
 
 @Injectable()

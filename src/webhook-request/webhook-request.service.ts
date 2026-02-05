@@ -3,7 +3,7 @@ import { WebhookRequestDto } from './dto/create-webhook-request.dto';
 import { WebhookRequestRepository } from './webhook-request.repository';
 import { WebhookService } from 'src/webhook/webhook.service';
 import { WebhookRequestEntity } from './entity/webhook-request.entity';
-import { WebhookRequest } from 'generated/prisma/client';
+import { WebhookRequest } from '../prisma/generated/prisma/client';
 
 @Injectable()
 export class WebhookRequestService {

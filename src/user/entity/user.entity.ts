@@ -1,6 +1,6 @@
 import { generateId } from 'src/utils/shared/generate.uuidv7';
 import { CreateUserDto } from '../dto/create-user.dto';
-import { User } from 'generated/prisma/client';
+import { User } from '../../prisma/generated/prisma/client';
 
 export class UserEntity {
   id: User['id'];

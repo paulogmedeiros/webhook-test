@@ -8,7 +8,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { User } from 'generated/prisma/client';
+import { User } from '../../prisma/generated/prisma/client';
 
 export class CreateUserDto {
   @ApiProperty({

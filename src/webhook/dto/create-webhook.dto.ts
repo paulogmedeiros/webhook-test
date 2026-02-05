@@ -11,7 +11,7 @@ import {
   IsArray,
   ArrayNotEmpty,
 } from 'class-validator';
-import { Webhook } from 'generated/prisma/client';
+import { Webhook } from '../../prisma/generated/prisma/client';
 import { IsDateWithinThreeMonths } from './validators/IsDateWithinOneYear';
 import { Transform } from 'class-transformer';
 import { EnumMethods } from 'src/enum/methods';

@@ -1,4 +1,4 @@
-import { Webhook } from 'generated/prisma/client';
+import { Webhook } from '../../prisma/generated/prisma/client';
 import { generateId } from 'src/utils/shared/generate.uuidv7';
 import { EnumWebhookStatus } from '../enum/status';
 import type { webhookDto } from '../types/webhook.types';

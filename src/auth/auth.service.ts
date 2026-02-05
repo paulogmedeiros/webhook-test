@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import { comparePasswords } from 'src/utils/shared/generate.hashing';
-import { User } from 'generated/prisma/client';
+import { User } from '../prisma/generated/prisma/client';
 import { RecoveredDto } from './dto/recovered.dto';
 import { EmailService } from 'src/email/email.service';
 

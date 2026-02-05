@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 // import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from './user.repository';
-import { User } from 'generated/prisma/client';
+import { User } from '../prisma/generated/prisma/client';
 import { hashPassword } from 'src/utils/shared/generate.hashing';
 import { UserEntity } from './entity/user.entity';
 

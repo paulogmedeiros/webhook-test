@@ -1,4 +1,4 @@
-import { Webhook, WebhookRequest } from 'generated/prisma/client';
+import { Webhook, WebhookRequest } from '../../prisma/generated/prisma/client';
 
 export class WebhookRequestDto {
   body: WebhookRequest['body'];

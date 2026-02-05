@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateWebhookDto } from './dto/create-webhook.dto';
 import { WebhookRepository } from './webhook.repository';
-import { Webhook } from 'generated/prisma/client';
+import { Webhook } from '../prisma/generated/prisma/client';
 import { UserService } from 'src/user/user.service';
 import { WebhookEntity } from './entity/webhook.entity';
 import type {
