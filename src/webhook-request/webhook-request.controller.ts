@@ -8,20 +8,20 @@ import {
   Put,
   Req,
 } from '@nestjs/common';
-import { WebhookResquestService } from './webhook-resquest.service';
+import { WebhookRequestService } from './webhook-request.service';
 import { Public } from 'src/auth/decorators/public.decorator';
 import type { Request } from 'express';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { WebhookRequestDto } from './dto/create-webhook-request.dto';
 import { EnumMethods } from 'src/enum/methods';
 import { JsonValue } from '@prisma/client/runtime/client';
 import { WebhookRequestEntity } from './entity/webhook-request.entity';
+import { SwaggerTags } from 'src/swagger/swagger.tags';
 
+@ApiTags(SwaggerTags.WEBHOOK_REQUEST)
 @Controller('webhook-resquet')
-export class WebhookResquestController {
-  constructor(
-    private readonly _webhookResquestService: WebhookResquestService,
-  ) {}
+export class WebhookRequestController {
+  constructor(private readonly _webhookRequestService: WebhookRequestService) {}
 
   private isValidMethod(method: string): method is EnumMethods {
     return Object.values(EnumMethods).includes(method as EnumMethods);
@@ -31,7 +31,7 @@ export class WebhookResquestController {
   async getRequestsByWebhookId(
     @Param('webhookId') webhookId: string,
   ): Promise<WebhookRequestEntity[]> {
-    return await this._webhookResquestService.findByWebhookId(webhookId);
+    return await this._webhookRequestService.findByWebhookId(webhookId);
   }
 
   @Public()
@@ -56,7 +56,7 @@ export class WebhookResquestController {
       headers,
       ipAddress,
     );
-    await this._webhookResquestService.create(webhookRequestDto);
+    await this._webhookRequestService.create(webhookRequestDto);
   }
 
   @Public()
@@ -81,7 +81,7 @@ export class WebhookResquestController {
       headers,
       ipAddress,
     );
-    await this._webhookResquestService.create(webhookRequestDto);
+    await this._webhookRequestService.create(webhookRequestDto);
   }
   @ApiBearerAuth()
   @Post('authenticated/:tokenPublic')
@@ -105,7 +105,7 @@ export class WebhookResquestController {
       headers,
       ipAddress,
     );
-    await this._webhookResquestService.create(webhookRequestDto);
+    await this._webhookRequestService.create(webhookRequestDto);
   }
 
   @ApiBearerAuth()
@@ -130,11 +130,11 @@ export class WebhookResquestController {
       headers,
       ipAddress,
     );
-    await this._webhookResquestService.create(webhookRequestDto);
+    await this._webhookRequestService.create(webhookRequestDto);
   }
 
   @Delete(':id')
   async deleteWebhookRequest(@Param('id') id: string): Promise<void> {
-    return await this._webhookResquestService.remove(id);
+    return await this._webhookRequestService.remove(id);
   }
 }

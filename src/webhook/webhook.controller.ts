@@ -10,13 +10,14 @@ import {
 } from '@nestjs/common';
 import { WebhookService } from './webhook.service';
 import { CreateWebhookDto } from './dto/create-webhook.dto';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Request as ExpressRequest } from 'express';
 import { Webhook } from 'generated/prisma/client';
 import {
   UpdateStatusWebhookDto,
   UpdateWebhookDto,
 } from './dto/update-webhook.dto';
+import { SwaggerTags } from 'src/swagger/swagger.tags';
 
 /**
  * Todo
@@ -27,6 +28,7 @@ import {
  * Deletar webhook (soft delete) -- v
  * Cron para desativar webhooks expirados -- v
  */
+@ApiTags(SwaggerTags.WEBHOOK)
 @ApiBearerAuth()
 @Controller('webhook')
 export class WebhookController {

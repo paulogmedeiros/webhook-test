@@ -4,7 +4,7 @@ import { WebhookRequestEntity } from './entity/webhook-request.entity';
 import { WebhookRequest } from 'generated/prisma/client';
 
 @Injectable()
-export class WebhookResquestRepository {
+export class WebhookRequestRepository {
   constructor(private prisma: PrismaService) {}
 
   async selectByWebhookId(webhookId: string): Promise<WebhookRequestEntity[]> {

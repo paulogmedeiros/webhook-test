@@ -1,14 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { WebhookRequestDto } from './dto/create-webhook-request.dto';
-import { WebhookResquestRepository } from './webhook-request.repository';
+import { WebhookRequestRepository } from './webhook-request.repository';
 import { WebhookService } from 'src/webhook/webhook.service';
 import { WebhookRequestEntity } from './entity/webhook-request.entity';
 import { WebhookRequest } from 'generated/prisma/client';
 
 @Injectable()
-export class WebhookResquestService {
+export class WebhookRequestService {
   constructor(
-    private readonly _webhookResquestRepository: WebhookResquestRepository,
+    private readonly _webhookRequestRepository: WebhookRequestRepository,
     private readonly _webhookService: WebhookService,
   ) {}
 
@@ -17,7 +17,7 @@ export class WebhookResquestService {
     if (!webhook) {
       throw new NotFoundException('Webhook não encontrado');
     }
-    return await this._webhookResquestRepository.selectByWebhookId(webhookId);
+    return await this._webhookRequestRepository.selectByWebhookId(webhookId);
   }
 
   async create(webhookRequestDto: WebhookRequestDto): Promise<void> {
@@ -37,13 +37,13 @@ export class WebhookResquestService {
       webhookRequestDto,
       webhook.id,
     );
-    await this._webhookResquestRepository.insert(webhookRequest);
+    await this._webhookRequestRepository.insert(webhookRequest);
   }
 
   private findWebhookRequestById(
     id: WebhookRequest['id'],
   ): Promise<WebhookRequest | null> {
-    return this._webhookResquestRepository.selectById(id);
+    return this._webhookRequestRepository.selectById(id);
   }
 
   async remove(id: WebhookRequest['id']): Promise<void> {
@@ -51,6 +51,6 @@ export class WebhookResquestService {
     if (!webhookRequest) {
       throw new NotFoundException('Webhook Request não encontrado');
     }
-    await this._webhookResquestRepository.delete(id);
+    await this._webhookRequestRepository.delete(id);
   }
 }
