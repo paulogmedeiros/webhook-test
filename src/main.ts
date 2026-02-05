@@ -18,9 +18,9 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  if (process.env.NODE_ENV !== 'production') {
-    setupSwagger(app);
-  }
+
+  setupSwagger(app);
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap().catch((err) => {

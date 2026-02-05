@@ -13,7 +13,7 @@ import { RecoveredDto } from './dto/recovered.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { SwaggerTags } from 'src/swagger/swagger.tags';
 import { SwaggerDescriptions } from 'src/swagger/descriptions';
-import { ApiAuthLoginResponse } from 'src/swagger/decorators/auth.decortors';
+import { ApiAuthLoginResponse } from 'src/swagger/decorators/auth.decorators';
 
 /**
  * Todo
