@@ -17,10 +17,10 @@ async function bootstrap() {
   );
 
   setupSwagger(app);
+  const port = process.env.PORT ?? 3000;
+  await app.listen(port, '0.0.0.0');
+
   const logger = new Logger('NestApplication');
-
-  await app.listen(process.env.PORT ?? 3000);
-
   const appUrl = await app.getUrl();
 
   logger.log('====================================================');

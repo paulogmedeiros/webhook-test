@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
@@ -12,6 +12,7 @@ import { WebhookModule } from 'src/webhook/webhook.module';
 import { WebhookRequestModule } from 'src/webhook-request/webhook-request.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EmailModule } from 'src/email/email.module';
+import { LoggerMiddleware } from 'src/middlewares/logger.middleware';
 
 @Module({
   imports: [
@@ -36,4 +37,8 @@ import { EmailModule } from 'src/email/email.module';
     AppService,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}
