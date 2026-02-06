@@ -32,7 +32,9 @@ async function bootstrap() {
   logger.log('====================================================');
   logger.log(`🚀 Aplicação rodando em: ${appUrl}/health`);
   logger.log(`📘 Documentação Swagger: ${appUrl}/docs`);
-  logger.log(`💾 Base de dados: ${process.env.DATABASE_URL!.split('/')[3]}`);
+  logger.log(
+    `💾 Base de dados: ${process.env.DATABASE_HOST}/${process.env.DATABASE_URL!.split('/')[3]}`,
+  );
   logger.log('====================================================');
 }
 bootstrap().catch((err) => {
