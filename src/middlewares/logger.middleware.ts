@@ -10,7 +10,7 @@ export class LoggerMiddleware implements NestMiddleware {
     res.on('finish', () => {
       const time = Date.now() - start;
       this.logger.log(
-        `${req.method} IP ${req.ip} ${req.originalUrl} ${res.statusCode} - ${time}ms}`,
+        `${req.method} ${res.statusCode} IP ${req.ip} ${req.originalUrl} - ${time}ms`,
       );
     });
 
