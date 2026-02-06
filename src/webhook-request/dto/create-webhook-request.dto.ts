@@ -7,6 +7,7 @@ export class WebhookRequestDto {
   url: WebhookRequest['url'];
   headers: WebhookRequest['headers'];
   ipAddress: WebhookRequest['ipAddress'];
+  isAuthenticated: Webhook['isAuthenticated'];
 
   constructor(
     body: WebhookRequest['body'],

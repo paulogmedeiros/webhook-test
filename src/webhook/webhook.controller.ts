@@ -19,15 +19,6 @@ import {
 } from './dto/update-webhook.dto';
 import { SwaggerTags } from 'src/swagger/swagger.tags';
 
-/**
- * Todo
- * Paginação dos webhooks
- * Pegar usuario que fez a requisição e coletar apenas os webhooks dele com os metodos -- V
- * Atualizar webhook -- v
- * Ativar/desativar webhook -- v
- * Deletar webhook (soft delete) -- v
- * Cron para desativar webhooks expirados -- v
- */
 @ApiTags(SwaggerTags.WEBHOOK)
 @ApiBearerAuth()
 @Controller('webhook')

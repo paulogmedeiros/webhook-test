@@ -3,12 +3,6 @@ import { AppModule } from './app/app.module';
 import { setupSwagger } from './config/swagger.config';
 import { Logger, ValidationPipe } from '@nestjs/common';
 
-/**
- * Todo
- * Documentar a aplicação
- * Logs de requisições e erros
- */
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: ['error', 'log', 'fatal'],

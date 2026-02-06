@@ -56,6 +56,7 @@ export class WebhookRequestController {
       headers,
       ipAddress,
     );
+    webhookRequestDto.isAuthenticated = false;
     await this._webhookRequestService.create(webhookRequestDto);
   }
 
@@ -81,6 +82,7 @@ export class WebhookRequestController {
       headers,
       ipAddress,
     );
+    webhookRequestDto.isAuthenticated = false;
     await this._webhookRequestService.create(webhookRequestDto);
   }
   @ApiBearerAuth()
@@ -105,6 +107,7 @@ export class WebhookRequestController {
       headers,
       ipAddress,
     );
+    webhookRequestDto.isAuthenticated = true;
     await this._webhookRequestService.create(webhookRequestDto);
   }
 
@@ -130,6 +133,7 @@ export class WebhookRequestController {
       headers,
       ipAddress,
     );
+    webhookRequestDto.isAuthenticated = true;
     await this._webhookRequestService.create(webhookRequestDto);
   }
 

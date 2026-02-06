@@ -15,11 +15,6 @@ import { SwaggerTags } from 'src/swagger/swagger.tags';
 import { SwaggerDescriptions } from 'src/swagger/descriptions';
 import { ApiAuthLoginResponse } from 'src/swagger/decorators/auth.decorators';
 
-/**
- * Todo
- * Criar endpoint para refresh token
- * Salvar cookie no cookie
- */
 @ApiTags(SwaggerTags.AUTH)
 @Controller('auth')
 export class AuthController {

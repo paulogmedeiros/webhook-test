@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { WebhookRequestDto } from './dto/create-webhook-request.dto';
 import { WebhookRequestRepository } from './webhook-request.repository';
 import { WebhookService } from 'src/webhook/webhook.service';
@@ -26,6 +30,10 @@ export class WebhookRequestService {
     );
     if (!webhook) {
       throw new NotFoundException('Webhook não encontrado');
+    }
+
+    if (webhook.isAuthenticated != webhookRequestDto.isAuthenticated) {
+      throw new BadRequestException('Rota invalida pela autenticação');
     }
 
     const allowedMethods = webhook.methods.map((m) => m.method);
