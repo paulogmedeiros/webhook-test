@@ -28,7 +28,10 @@ export class AuthController {
   async signIn(@Body() signInDto: LoginDto) {
     return await this.authService.signIn(signInDto.email, signInDto.password);
   }
-
+  @ApiOperation({
+    summary: 'Em desenvolvimento',
+    deprecated: true,
+  })
   @Public()
   @Post('forgot-password')
   async recoverd(@Body() recoveredDto: RecoveredDto): Promise<void> {
