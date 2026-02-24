@@ -28,13 +28,13 @@ export class UserService {
     return await this._userRepository.selectById(id);
   }
 
-  // findAll() {
-  //   return `This action returns all user`;
-  // }
-
-  // findOne(id: number) {
-  //   return `This action returns a #${id} user`;
-  // }
+  async findOne(id: UserEntity['id']): Promise<User | null> {
+    const user = await this.findById(id);
+    if (!user) {
+      throw new BadRequestException('Usuário não encontrado');
+    }
+    return user;
+  }
 
   // update(id: number, updateUserDto: UpdateUserDto) {
   //   return `This action updates a #${id} user`;
